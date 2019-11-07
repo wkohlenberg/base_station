@@ -1,0 +1,9 @@
+# Compiled source #
+###################
+/obj
+main
+core
+*.o
+*.out*
+*.lst
+Makefile
