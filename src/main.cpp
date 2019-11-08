@@ -3,6 +3,7 @@
 // Compile: gcc -Wall -lncurses -o main main.c
 // Run    : ./main
 
+#include <iostream>
 #include <ncurses.h>
 
 int main()
