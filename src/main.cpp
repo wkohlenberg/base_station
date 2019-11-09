@@ -6,12 +6,22 @@
 #include <iostream>
 #include <ncurses.h>
 
+#include "layout.h"
+
 int main()
 {
 	initscr();			// Start curses mode
-	printw("Hello World !!!");	// Print Hello World
-	refresh();			// Print it on to the real screen
-	getch();			// Wait for user input
+	clear();			// Clear the screen
+	noecho();
+	cbreak();
+	curs_set(0);		// Hide cursor
+
+	CLayout cLayout;
+
+	wgetch(cLayout.m_winSensorData[0]);
+
+
+
 	endwin();			// End curses mode
 
 	return 0;
