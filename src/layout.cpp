@@ -40,7 +40,7 @@ void CLayout::displayTitle(unsigned page){
 
 	int iStartX = 0;
 
-	attron(COLOR_PAIR(2));
+	wattron(pTitleWindow, COLOR_PAIR(1));
 	switch (page){
 		case 0:				// Menu
 			break;
@@ -56,6 +56,6 @@ void CLayout::displayTitle(unsigned page){
 			break;
 	}
 
-	attroff(COLOR_PAIR(2));
+	wattroff(pTitleWindow, COLOR_PAIR(1));
 	wrefresh(pTitleWindow);
 }
