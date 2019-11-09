@@ -16,6 +16,10 @@ int main()
 	cbreak();
 	curs_set(0);		// Hide cursor
 
+	// Start colors on screen
+	start_color();
+	init_pair(1, COLOR_GREEN, COLOR_BLACK);
+
 	CLayout cLayout;
 
 	wgetch(cLayout.m_winSensorData[0]);
