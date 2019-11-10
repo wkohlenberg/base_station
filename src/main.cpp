@@ -22,9 +22,15 @@ int main()
 
 	CLayout cLayout;
 
-	wgetch(cLayout.m_winSensorData[0]);
-
-
+	bool bExit = false;
+	int nKey;
+	while (!bExit) {
+		nKey = cLayout.getchar();
+		if (nKey == 27 || nKey == 'q') {
+			// Exit the program
+			bExit = true;
+		}
+	}
 
 	endwin();			// End curses mode
 
