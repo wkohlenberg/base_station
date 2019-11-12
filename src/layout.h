@@ -10,6 +10,9 @@
 #define SENSOR_DATA_WINDOW_WIDTH	30
 #define SENSOR_DATA_WINDOW_HEIGHT	13
 
+#define ROUTING_WINDOW_WIDTH		50
+#define ROUTING_WINDOW_HEIGHT		24
+
 class CSensorWindow{
 public:
 	CSensorWindow();
@@ -19,6 +22,16 @@ public:
 	void displaySensorDataWindows();
 
 	std::vector<WINDOW*> m_winSensorData;
+};
+
+class CRoutingWindow{
+public:
+	CRoutingWindow();
+	~CRoutingWindow();
+
+	void updateRoutingWindow();
+
+	WINDOW *pRoutingWindow;
 };
 
 class CLayout{
@@ -31,10 +44,14 @@ public:
 	int getchar();
 
 	CSensorWindow cSensorWindow;
+	CRoutingWindow cRoutingWindow;
 
 private:
 	WINDOW *pTitleWindow;
 	WINDOW *pFooterWindow;
+
+	WINDOW *pSensorPageButton;
+	WINDOW *pRoutingPageButton;
 
 	// Title strings
 	std::string sTitleSensorPage 	= "Sensor Data";
