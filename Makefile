@@ -15,4 +15,4 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	$(CXX) $(CXXFLAGS) $(INC_WSPP) -c -o $@ $< $(LDLIBS)
 
 clean:
-	rm -rf $(OBJ_DIR)/$(OBJ_FILES) main
+	rm -rf $(OBJ_FILES) main
