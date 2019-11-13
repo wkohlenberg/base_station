@@ -13,6 +13,11 @@
 #define ROUTING_WINDOW_WIDTH		50
 #define ROUTING_WINDOW_HEIGHT		24
 
+struct routeInfo{
+	int hops;
+	int destination;
+};
+
 class CSensorWindow{
 public:
 	CSensorWindow();
@@ -31,7 +36,13 @@ public:
 
 	void updateRoutingWindow();
 
+	void addToRoutingTable(int dest, int hop);
+	void deleteFromRoutingTable(int dest);
+
 	WINDOW *pRoutingWindow;
+
+private:
+	std::vector<routeInfo> vRoutingTable;
 };
 
 class CLayout{

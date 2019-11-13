@@ -38,6 +38,11 @@ void CSensorWindow::displaySensorDataWindows(){
 CRoutingWindow::CRoutingWindow(){
 	int iStartX = (COLS - ROUTING_WINDOW_WIDTH)/2;
 	pRoutingWindow = newwin(ROUTING_WINDOW_HEIGHT, ROUTING_WINDOW_WIDTH, 2, iStartX);
+
+	// Add some test data
+	addToRoutingTable(55, 4);
+	addToRoutingTable(65, 6);
+	addToRoutingTable(81, 2);
 }
 
 CRoutingWindow::~CRoutingWindow(){
@@ -46,7 +51,31 @@ CRoutingWindow::~CRoutingWindow(){
 
 void CRoutingWindow::updateRoutingWindow(){
 	box(pRoutingWindow, 0, 0);
+
+	mvwprintw(pRoutingWindow, 1, 1, "Time       Destination    hops");
+	for (unsigned i = 0; i < vRoutingTable.size(); i++){
+		mvwprintw(pRoutingWindow, (i+2), 1, "hh:mm:ss            %2d      %2d", vRoutingTable[i].destination, vRoutingTable[i].hops);
+	}
+
 	wrefresh(pRoutingWindow);
+}
+
+void CRoutingWindow::addToRoutingTable(int dest, int hop){
+	vRoutingTable.push_back(routeInfo());
+	vRoutingTable.back().destination = dest;
+	vRoutingTable.back().hops = hop;
+}
+
+void CRoutingWindow::deleteFromRoutingTable(int dest){
+
+	unsigned rtIndex = 0;
+	for (rtIndex = 0; rtIndex < vRoutingTable.size(); rtIndex++){
+		if (vRoutingTable[rtIndex].destination == dest){
+			break;
+		}
+	}
+
+	vRoutingTable.erase(vRoutingTable.begin()+rtIndex);
 }
 
 /**
