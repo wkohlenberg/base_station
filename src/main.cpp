@@ -25,6 +25,9 @@ int main()
 	bool bExit = false;
 	int nKey;
 	while (!bExit) {
+
+		cLayout.displayMiddle();
+
 		nKey = cLayout.getchar();
 		if (nKey == 27 || nKey == 'q') {
 			// Exit the program
