@@ -26,7 +26,7 @@ public:
 	void updateSensorDataWindow(int nWin);
 	void displaySensorDataWindows();
 
-	std::vector<WINDOW*> m_winSensorData;
+	std::vector<WINDOW *> m_winSensorData;
 };
 
 class CRoutingWindow{
@@ -36,8 +36,12 @@ public:
 
 	void updateRoutingWindow();
 
+	void processRoutingInformation(std::vector<int> data);
+
 	void addToRoutingTable(int dest, int hop);
 	void deleteFromRoutingTable(int dest);
+
+	int getchar();
 
 	WINDOW *pRoutingWindow;
 
@@ -52,10 +56,15 @@ public:
 
 	void displayTitle(unsigned page);
 	void displayFooter();
+	void displayMiddle(unsigned page);
 	int getchar();
+
+	void processRoutingInformation(std::vector<int> data);
 
 	CSensorWindow cSensorWindow;
 	CRoutingWindow cRoutingWindow;
+
+	unsigned page = 1;						// Sensor is 0 and routing is 1
 
 private:
 	WINDOW *pTitleWindow;
@@ -63,6 +72,8 @@ private:
 
 	WINDOW *pSensorPageButton;
 	WINDOW *pRoutingPageButton;
+
+	int update = 0;
 
 	// Title strings
 	std::string sTitleSensorPage 	= "Sensor Data";

@@ -25,6 +25,7 @@ int main(){
 	}
 
 	initscr();			// Start curses mode
+	nodelay(stdscr, true);
 	clear();			// Clear the screen
 	noecho();
 	cbreak();
@@ -41,6 +42,10 @@ int main(){
 	while (!bExit) {
 
 		processSerialCommunication(cLayout);
+
+		cLayout.displayTitle(cLayout.page);
+		cLayout.displayMiddle(cLayout.page);
+		cLayout.displayFooter();
 
 		nKey = cLayout.getchar();
 		if (nKey == 27 || nKey == 'q') {

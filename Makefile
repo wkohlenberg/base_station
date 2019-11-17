@@ -38,7 +38,7 @@ CXXFLAGS := -std=c++11
 all: $(EXTENSION)
 
 $(EXTENSION): $(CXX_OBJECTS) $(C_OBJECTS)
-	$(CXX) -o $@ $^ $(LDLIBS)
+	$(CXX) $(CFLAGS) -o $@ $^ $(LDLIBS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@echo ".cpp -> .o"
