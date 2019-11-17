@@ -38,11 +38,14 @@ public:
 
 	void addToRoutingTable(int dest, int hop);
 	void deleteFromRoutingTable(int dest);
+	int getchar();
 
 	WINDOW *pRoutingWindow;
 
 private:
 	std::vector<routeInfo> vRoutingTable;
+
+	int cnt;
 };
 
 class CLayout{
@@ -51,6 +54,7 @@ public:
 	~CLayout();
 
 	void displayTitle(unsigned page);
+	void displayMiddle();
 	void displayFooter();
 	int getchar();
 

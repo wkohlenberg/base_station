@@ -38,11 +38,14 @@ void CSensorWindow::displaySensorDataWindows(){
 CRoutingWindow::CRoutingWindow(){
 	int iStartX = (COLS - ROUTING_WINDOW_WIDTH)/2;
 	pRoutingWindow = newwin(ROUTING_WINDOW_HEIGHT, ROUTING_WINDOW_WIDTH, 2, iStartX);
+	nodelay(pRoutingWindow, true);
 
 	// Add some test data
 	addToRoutingTable(55, 4);
 	addToRoutingTable(65, 6);
 	addToRoutingTable(81, 2);
+
+	cnt = 0;
 }
 
 CRoutingWindow::~CRoutingWindow(){
@@ -56,6 +59,8 @@ void CRoutingWindow::updateRoutingWindow(){
 	for (unsigned i = 0; i < vRoutingTable.size(); i++){
 		mvwprintw(pRoutingWindow, (i+2), 1, "hh:mm:ss            %2d      %2d", vRoutingTable[i].destination, vRoutingTable[i].hops);
 	}
+
+	mvwprintw(pRoutingWindow, 10, 1, "Update %i", cnt++);
 
 	wrefresh(pRoutingWindow);
 }
@@ -76,6 +81,10 @@ void CRoutingWindow::deleteFromRoutingTable(int dest){
 	}
 
 	vRoutingTable.erase(vRoutingTable.begin()+rtIndex);
+}
+
+int CRoutingWindow::getchar(){
+	return wgetch(pRoutingWindow);
 }
 
 /**
@@ -141,6 +150,11 @@ void CLayout::displayFooter(){
 	wrefresh(pRoutingPageButton);
 }
 
+void CLayout::displayMiddle(){
+	cRoutingWindow.updateRoutingWindow();
+}
+
 int CLayout::getchar(){
-	return wgetch(pFooterWindow);
+	//return wgetch(pFooterWindow);
+	return cRoutingWindow.getchar();
 }
