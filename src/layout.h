@@ -5,6 +5,7 @@
 #include <vector>
 #include <ncurses.h>
 #include <string>
+#include <ctime>
 
 #define SENSOR_DATA_WINDOWS			6
 #define SENSOR_DATA_WINDOW_WIDTH	30
@@ -69,6 +70,8 @@ private:
 
 	WINDOW *pSensorPageButton;
 	WINDOW *pRoutingPageButton;
+
+	tm *locTime;
 
 	// Title strings
 	std::string sTitleSensorPage 	= "Sensor Data";

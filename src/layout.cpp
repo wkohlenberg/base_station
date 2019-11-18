@@ -60,6 +60,11 @@ void CRoutingWindow::updateRoutingWindow(){
 		mvwprintw(pRoutingWindow, (i+2), 1, "hh:mm:ss            %2d      %2d", vRoutingTable[i].destination, vRoutingTable[i].hops);
 	}
 
+	// Print empty rows to clear screen
+	for (unsigned i = vRoutingTable.size(); i < ROUTING_WINDOW_HEIGHT-3; i++){
+		mvwprintw(pRoutingWindow, (i+2), 1, "                                ");
+	}
+
 	mvwprintw(pRoutingWindow, 10, 1, "Update %i", cnt++);
 
 	wrefresh(pRoutingWindow);
@@ -116,6 +121,10 @@ int CRoutingWindow::getchar(){
  */
 CLayout::CLayout(){
 
+	// Get date time from ctime
+	time_t now = time(0);
+	locTime = localtime(&now);
+
 	// Print page title
 	pTitleWindow = newwin(1, COLS, 0, 0);
 	//displayTitle(1);
@@ -140,6 +149,8 @@ CLayout::~CLayout(){
 
 void CLayout::displayTitle(unsigned page){
 	wclear(pTitleWindow);
+
+	mvwprintw(pTitleWindow, 0, 90, "%d-%d-%d", locTime->tm_mday, locTime->tm_mon, (1900+locTime->tm_year));
 
 	int iStartX = 0;
 
