@@ -38,6 +38,7 @@ public:
 
 	void addToRoutingTable(int dest, int hop);
 	void deleteFromRoutingTable(int dest);
+	void processRoutingInformation(std::vector<int> data);
 	int getchar();
 
 	WINDOW *pRoutingWindow;
@@ -57,6 +58,7 @@ public:
 	void displayMiddle();
 	void displayFooter();
 	int getchar();
+	void processRoutingInformation(std::vector<int> data);
 
 	CSensorWindow cSensorWindow;
 	CRoutingWindow cRoutingWindow;

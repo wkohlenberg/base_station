@@ -66,6 +66,14 @@ void CRoutingWindow::updateRoutingWindow(){
 }
 
 void CRoutingWindow::addToRoutingTable(int dest, int hop){
+
+	for (unsigned rtIndex = 0; rtIndex < vRoutingTable.size(); rtIndex++){
+		if (vRoutingTable[rtIndex].destination == dest){
+			vRoutingTable[rtIndex].hops = hop;
+			return;
+		}
+	}
+
 	vRoutingTable.push_back(routeInfo());
 	vRoutingTable.back().destination = dest;
 	vRoutingTable.back().hops = hop;
@@ -76,11 +84,27 @@ void CRoutingWindow::deleteFromRoutingTable(int dest){
 	unsigned rtIndex = 0;
 	for (rtIndex = 0; rtIndex < vRoutingTable.size(); rtIndex++){
 		if (vRoutingTable[rtIndex].destination == dest){
+			vRoutingTable.erase(vRoutingTable.begin()+rtIndex);
 			break;
 		}
 	}
+}
 
-	vRoutingTable.erase(vRoutingTable.begin()+rtIndex);
+void CRoutingWindow::processRoutingInformation(std::vector<int> data){
+	int dest = 0;
+	int hop = 0;
+
+	for (unsigned dataIndex = 0; dataIndex < data.size(); dataIndex++){
+		dest = data.at(dataIndex++);
+		hop = data.at(dataIndex);
+
+		if (hop == 0){
+			deleteFromRoutingTable(dest);
+		}
+		else if (hop > 0){
+			addToRoutingTable(dest, hop);
+		}
+	}
 }
 
 int CRoutingWindow::getchar(){
@@ -157,4 +181,8 @@ void CLayout::displayMiddle(){
 int CLayout::getchar(){
 	//return wgetch(pFooterWindow);
 	return cRoutingWindow.getchar();
+}
+
+void CLayout::processRoutingInformation(std::vector<int> data){
+	cRoutingWindow.processRoutingInformation(data);
 }
