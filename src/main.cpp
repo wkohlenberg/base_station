@@ -6,6 +6,9 @@
 #include <iostream>
 #include <ncurses.h>
 
+#include <thread>
+#include <chrono>
+
 #include "layout.h"
 
 int main()
@@ -24,7 +27,7 @@ int main()
 
 	bool bExit = false;
 	int nKey;
-	while (!bExit) {
+	/*while (!bExit) {
 
 		cLayout.displayMiddle();
 
@@ -33,7 +36,25 @@ int main()
 			// Exit the program
 			bExit = true;
 		}
-	}
+	}*/
+
+	cLayout.displayMiddle();
+	cLayout.getchar();
+
+	std::this_thread::sleep_for (std::chrono::seconds(1));
+
+	std::vector<int> serialData;
+	serialData.push_back(75);
+	serialData.push_back(2);
+	serialData.push_back(85);
+	serialData.push_back(4);
+	serialData.push_back(55);
+	serialData.push_back(0);
+	cLayout.processRoutingInformation(serialData);
+	cLayout.displayMiddle();
+	cLayout.getchar();
+
+	std::this_thread::sleep_for (std::chrono::seconds(1));
 
 	endwin();			// End curses mode
 
