@@ -46,8 +46,6 @@ public:
 
 private:
 	std::vector<routeInfo> vRoutingTable;
-
-	int cnt;
 };
 
 class CLayout{

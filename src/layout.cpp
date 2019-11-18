@@ -44,8 +44,6 @@ CRoutingWindow::CRoutingWindow(){
 	addToRoutingTable(55, 4);
 	addToRoutingTable(65, 6);
 	addToRoutingTable(81, 2);
-
-	cnt = 0;
 }
 
 CRoutingWindow::~CRoutingWindow(){
@@ -64,8 +62,6 @@ void CRoutingWindow::updateRoutingWindow(){
 	for (unsigned i = vRoutingTable.size(); i < ROUTING_WINDOW_HEIGHT-3; i++){
 		mvwprintw(pRoutingWindow, (i+2), 1, "                                ");
 	}
-
-	mvwprintw(pRoutingWindow, 10, 1, "Update %i", cnt++);
 
 	wrefresh(pRoutingWindow);
 }
@@ -190,7 +186,6 @@ void CLayout::displayMiddle(){
 }
 
 int CLayout::getchar(){
-	//return wgetch(pFooterWindow);
 	return cRoutingWindow.getchar();
 }
 
