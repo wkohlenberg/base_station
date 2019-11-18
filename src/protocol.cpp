@@ -33,7 +33,7 @@ std::vector<int> csvString(std::string dataString, char delim){
 }
 
 // Process serial communication and push data to the correct window
-int processSerialCommunication(CLayout layout){
+int processSerialCommunication(CLayout &layout){
 
 	uint8_t nType;
 	int nPacket = 0;
@@ -43,15 +43,16 @@ int processSerialCommunication(CLayout layout){
 
 		nPacket = ReceivePacket(aBuf, SERIAL_BUF_SIZE);
 		std::vector<int> data = csvString(aBuf, ',');
-		
+
 		switch (nType) {
 			case '!': // Type 1
 				//printf("! [%i] [%s]\n", nPacket, aBuf);
-				std::cout << "! [" << nPacket << "] ";
+				/*std::cout << "! [" << nPacket << "] ";
 				for (unsigned i = 0; i < data.size(); i++) {
 					std::cout << data.at(i) << " ";
 				}
-				std::cout << std::endl;
+				std::cout << std::endl;*/
+				layout.processRoutingInformation(data);
 				break;
 
 			case '@': // Type 2

@@ -10,6 +10,6 @@
 #define SERIAL_BUF_SIZE			255
 
 int ReceivePacket(char* aBuf, int nSize);
-int processSerialCommunication(CLayout layout);
+int processSerialCommunication(CLayout &layout);
 
 #endif
