@@ -15,6 +15,7 @@
 #define ROUTING_WINDOW_HEIGHT		24
 
 struct routeInfo{
+	std::string timestamp;
 	int hops;
 	int destination;
 };

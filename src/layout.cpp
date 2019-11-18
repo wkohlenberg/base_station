@@ -55,7 +55,7 @@ void CRoutingWindow::updateRoutingWindow(){
 
 	mvwprintw(pRoutingWindow, 1, 1, "Time       Destination    hops");
 	for (unsigned i = 0; i < vRoutingTable.size(); i++){
-		mvwprintw(pRoutingWindow, (i+2), 1, "hh:mm:ss            %2d      %2d", vRoutingTable[i].destination, vRoutingTable[i].hops);
+		mvwprintw(pRoutingWindow, (i+2), 1, "%s            %2d      %2d", vRoutingTable[i].timestamp.c_str(), vRoutingTable[i].destination, vRoutingTable[i].hops);
 	}
 
 	// Print empty rows to clear screen
@@ -78,6 +78,14 @@ void CRoutingWindow::addToRoutingTable(int dest, int hop){
 	vRoutingTable.push_back(routeInfo());
 	vRoutingTable.back().destination = dest;
 	vRoutingTable.back().hops = hop;
+
+	// Add time component
+	time_t rawtime;
+	time(&rawtime);
+	struct tm* timeinfo = localtime(&rawtime);
+	char buf[20];
+	strftime (buf,sizeof(buf),"%T",timeinfo);
+	vRoutingTable.back().timestamp = buf;
 }
 
 void CRoutingWindow::deleteFromRoutingTable(int dest){
