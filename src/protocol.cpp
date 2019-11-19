@@ -36,25 +36,26 @@ std::vector<int> csvString(std::string dataString, char delim){
 int processSerialCommunication(CLayout &layout){
 
 	uint8_t nType;
-	int nPacket = 0;
 	char aBuf[SERIAL_BUF_SIZE];
 
 	if (XmegaReadByte(&nType)) {
 
-		nPacket = ReceivePacket(aBuf, SERIAL_BUF_SIZE);
+		ReceivePacket(aBuf, SERIAL_BUF_SIZE);
 		std::vector<int> data = csvString(aBuf, ',');
 
-		switch (nType) {
-			case '!': // Type 1
-				layout.processRoutingInformation(data);
-				break;
+		if (!data.empty()){
+			switch (nType) {
+				case '!': // Type 1
+					layout.processRoutingInformation(data);
+					break;
 
-			case '@': // Type 2
-				printf("@ [%i] [%s]\n", nPacket, aBuf);
-				break;
+				case '@': // Type 2
+					layout.processSensorInformation(data);
+					break;
 
-			default:
-				break;
+				default:
+					break;
+			}
 		}
 	}
 
