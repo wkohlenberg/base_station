@@ -46,12 +46,6 @@ int processSerialCommunication(CLayout &layout){
 
 		switch (nType) {
 			case '!': // Type 1
-				//printf("! [%i] [%s]\n", nPacket, aBuf);
-				/*std::cout << "! [" << nPacket << "] ";
-				for (unsigned i = 0; i < data.size(); i++) {
-					std::cout << data.at(i) << " ";
-				}
-				std::cout << std::endl;*/
 				layout.processRoutingInformation(data);
 				break;
 
