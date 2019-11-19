@@ -26,7 +26,10 @@ std::vector<int> csvString(std::string dataString, char delim){
 	while(sstream.good()){
 		std::string substr;
 		getline(sstream, substr, ',');
-		result.push_back(std::stoi(substr));
+		try{
+			result.push_back(std::stoi(substr));
+		}
+		catch (const std::invalid_argument& ia){}
 	}
 
 	return result;
@@ -41,7 +44,6 @@ int processSerialCommunication(CLayout &layout){
 	if (XmegaReadByte(&nType)) {
 
 		ReceivePacket(aBuf, SERIAL_BUF_SIZE);
-		std::vector<int> data = csvString(aBuf, ',');
 
 		if (!data.empty()){
 			switch (nType) {
