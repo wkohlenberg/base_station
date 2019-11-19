@@ -14,10 +14,22 @@
 #define ROUTING_WINDOW_WIDTH		50
 #define ROUTING_WINDOW_HEIGHT		24
 
+#define DEFAULT_PAGE_NUMBER			1
+
 struct routeInfo{
 	std::string timestamp;
 	int hops;
 	int destination;
+};
+
+struct sensorData{
+	std::string timestamp;
+	int value;
+};
+
+struct sensorInfo{
+	int ID;
+	std::vector<sensorData> data;
 };
 
 class CSensorWindow{
@@ -29,6 +41,8 @@ public:
 	void displaySensorDataWindows();
 
 	std::vector<WINDOW*> m_winSensorData;
+
+	std::vector<sensorInfo> vSensorInfo;
 };
 
 class CRoutingWindow{

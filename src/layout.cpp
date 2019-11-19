@@ -6,12 +6,31 @@
  * Class Sensor Window
  */
 CSensorWindow::CSensorWindow(){
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 1));
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 30));
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 59));
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 1));
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 30));
-	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 59));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 6));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 35));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 1, 64));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 6));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 35));
+	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 64));
+
+	// Place static sensorInfo in vector
+	vSensorInfo.push_back(sensorInfo());
+	vSensorInfo.back().ID = 75;
+	vSensorInfo.back().data.push_back(sensorData());
+	vSensorInfo.back().data.push_back(sensorData());
+	vSensorInfo.back().data[0].timestamp = "11:19:05";
+	vSensorInfo.back().data[0].value = 15;
+	vSensorInfo.back().data[1].timestamp = "11:20:38";
+	vSensorInfo.back().data[1].value = 956;
+
+	vSensorInfo.push_back(sensorInfo());
+	vSensorInfo.back().ID = 79;
+	vSensorInfo.back().data.push_back(sensorData());
+	vSensorInfo.back().data.push_back(sensorData());
+	vSensorInfo.back().data[0].timestamp = "11:25:48";
+	vSensorInfo.back().data[0].value = 1347;
+	vSensorInfo.back().data[1].timestamp = "11:26:01";
+	vSensorInfo.back().data[1].value = 865;
 }
 
 CSensorWindow::~CSensorWindow(){
@@ -22,7 +41,15 @@ CSensorWindow::~CSensorWindow(){
 
 void CSensorWindow::updateSensorDataWindow(int nWin){
 		wborder(m_winSensorData[nWin], '|', '|', '-', '-', '+', '+', '+', '+');
-		mvwprintw(m_winSensorData[nWin], 1, 1, "Sensor ...");
+
+		// Update sensor Information if data is available for this window
+		if ((unsigned)nWin < vSensorInfo.size()){
+			mvwprintw(m_winSensorData[nWin], 1, 1, "Sensor %d:", vSensorInfo[nWin].ID);
+
+			for (unsigned iData = 0; iData < vSensorInfo[nWin].data.size(); iData++){
+				mvwprintw(m_winSensorData[nWin],(iData+2), 1, "%s           %d", vSensorInfo[nWin].data[iData].timestamp.c_str(), vSensorInfo[nWin].data[iData].value);
+			}
+		}
 		wrefresh(m_winSensorData[nWin]);
 }
 
@@ -130,7 +157,7 @@ CLayout::CLayout(){
 	locTime = localtime(&now);
 
 	// Set default page
-	setPageNumber(2);
+	setPageNumber(DEFAULT_PAGE_NUMBER);
 
 	// Print page title
 	pTitleWindow = newwin(1, COLS, 0, 0);
@@ -196,6 +223,7 @@ void CLayout::displayMiddle(){
 		case 0:				// Menu
 			break;
 		case 1:
+			cSensorWindow.displaySensorDataWindows();
 			break;
 		case 2:
 			cRoutingWindow.updateRoutingWindow();
