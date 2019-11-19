@@ -129,13 +129,14 @@ CLayout::CLayout(){
 	time_t now = time(0);
 	locTime = localtime(&now);
 
+	// Set default page
+	setPageNumber(2);
+
 	// Print page title
 	pTitleWindow = newwin(1, COLS, 0, 0);
-	//displayTitle(1);
 
-	displayTitle(2);
-	cRoutingWindow.updateRoutingWindow();
-	//cSensorWindow.displaySensorDataWindows();
+	displayTitle();
+	displayMiddle();
 
 	// Init footer
 	pFooterWindow = newwin(4, 82, 26, 0);
@@ -151,23 +152,23 @@ CLayout::~CLayout(){
 
 }
 
-void CLayout::displayTitle(unsigned page){
-	wclear(pTitleWindow);
-
+void CLayout::displayTitle(){
 	mvwprintw(pTitleWindow, 0, 90, "%d-%d-%d", locTime->tm_mday, locTime->tm_mon, (1900+locTime->tm_year));
 
 	int iStartX = 0;
 
 	wattron(pTitleWindow, COLOR_PAIR(1));
-	switch (page){
+	switch (getPageNumber()){
 		case 0:				// Menu
 			break;
 		case 1:
 			iStartX = (COLS - sTitleSensorPage.length())/2;
+			mvwprintw(pTitleWindow, 0, iStartX, "                                          ");// clear title
 			mvwprintw(pTitleWindow, 0, iStartX, "%s", sTitleSensorPage.c_str());
 			break;
 		case 2:
 			iStartX = (COLS - sTitleRoutingPage.length())/2;
+			mvwprintw(pTitleWindow, 0, iStartX, "                                          ");// clear title
 			mvwprintw(pTitleWindow, 0, iStartX, "%s", sTitleRoutingPage.c_str());
 			break;
 		default:
@@ -190,7 +191,18 @@ void CLayout::displayFooter(){
 }
 
 void CLayout::displayMiddle(){
-	cRoutingWindow.updateRoutingWindow();
+
+	switch (getPageNumber()){
+		case 0:				// Menu
+			break;
+		case 1:
+			break;
+		case 2:
+			cRoutingWindow.updateRoutingWindow();
+			break;
+		default:
+			break;
+	}
 }
 
 int CLayout::getchar(){

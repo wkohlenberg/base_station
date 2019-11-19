@@ -54,11 +54,13 @@ public:
 	CLayout();
 	~CLayout();
 
-	void displayTitle(unsigned page);
+	void displayTitle();
 	void displayMiddle();
 	void displayFooter();
 	int getchar();
 	void processRoutingInformation(std::vector<int> data);
+	void setPageNumber(unsigned pageNumber){page = pageNumber;}
+	unsigned getPageNumber(){return page;}
 
 	CSensorWindow cSensorWindow;
 	CRoutingWindow cRoutingWindow;
@@ -71,6 +73,8 @@ private:
 	WINDOW *pRoutingPageButton;
 
 	tm *locTime;
+
+	unsigned page;
 
 	// Title strings
 	std::string sTitleSensorPage 	= "Sensor Data";
