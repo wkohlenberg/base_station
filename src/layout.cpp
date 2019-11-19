@@ -14,23 +14,14 @@ CSensorWindow::CSensorWindow(){
 	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 64));
 
 	// Place static sensorInfo in vector
-	vSensorInfo.push_back(sensorInfo());
-	vSensorInfo.back().ID = 75;
-	vSensorInfo.back().data.push_back(sensorData());
-	vSensorInfo.back().data.push_back(sensorData());
-	vSensorInfo.back().data[0].timestamp = "11:19:05";
-	vSensorInfo.back().data[0].value = 15;
-	vSensorInfo.back().data[1].timestamp = "11:20:38";
-	vSensorInfo.back().data[1].value = 956;
-
-	vSensorInfo.push_back(sensorInfo());
+/*	vSensorInfo.push_back(sensorInfo());
 	vSensorInfo.back().ID = 79;
 	vSensorInfo.back().data.push_back(sensorData());
 	vSensorInfo.back().data.push_back(sensorData());
 	vSensorInfo.back().data[0].timestamp = "11:25:48";
 	vSensorInfo.back().data[0].value = 1347;
 	vSensorInfo.back().data[1].timestamp = "11:26:01";
-	vSensorInfo.back().data[1].value = 865;
+	vSensorInfo.back().data[1].value = 865;*/
 }
 
 CSensorWindow::~CSensorWindow(){
@@ -44,10 +35,11 @@ void CSensorWindow::updateSensorDataWindow(int nWin){
 
 		// Update sensor Information if data is available for this window
 		if ((unsigned)nWin < vSensorInfo.size()){
-			mvwprintw(m_winSensorData[nWin], 1, 1, "Sensor %d:", vSensorInfo[nWin].ID);
+			mvwprintw(m_winSensorData[nWin], 1, 1, "Sensor %d:          Value", vSensorInfo[nWin].ID);
 
-			for (unsigned iData = 0; iData < vSensorInfo[nWin].data.size(); iData++){
-				mvwprintw(m_winSensorData[nWin],(iData+2), 1, "%s           %d", vSensorInfo[nWin].data[iData].timestamp.c_str(), vSensorInfo[nWin].data[iData].value);
+			int row = 2;
+			for (unsigned iData = vSensorInfo[nWin].data.size(); iData > 0; iData--){
+				mvwprintw(m_winSensorData[nWin], row++, 1, "%s              %d", vSensorInfo[nWin].data[(iData-1)].timestamp.c_str(), vSensorInfo[nWin].data[(iData-1)].value);
 			}
 		}
 		wrefresh(m_winSensorData[nWin]);
@@ -56,6 +48,56 @@ void CSensorWindow::updateSensorDataWindow(int nWin){
 void CSensorWindow::displaySensorDataWindows(){
 	for (unsigned i = 0; i < SENSOR_DATA_WINDOWS; i++){
 		updateSensorDataWindow(i);
+	}
+}
+
+void CSensorWindow::processSensorInformation(std::vector<int> data){
+
+	// put msb and lsb together
+	int iValue = data[2] + (data[1] << 8);
+	int ID = data[0];
+
+	// Check if ID already exists
+	for (unsigned iInfo = 0; iInfo < vSensorInfo.size(); iInfo++){
+		if (ID == vSensorInfo[iInfo].ID){
+			vSensorInfo[iInfo].data.push_back(sensorData());
+			vSensorInfo[iInfo].data.back().value = iValue;
+
+			// Add time component
+			time_t rawtime;
+			time(&rawtime);
+			struct tm* timeinfo = localtime(&rawtime);
+			char buf[20];
+			strftime (buf,sizeof(buf),"%T",timeinfo);
+			vSensorInfo[iInfo].data.back().timestamp = buf;
+
+			// Check if data length is longer than ten and remove the extra values
+			unsigned dataLength = vSensorInfo[iInfo].data.size();
+			if (dataLength > 10){
+				for (unsigned i = 0; i < (dataLength-10); i++){
+					vSensorInfo[iInfo].data.erase(vSensorInfo[iInfo].data.begin());
+				}
+			}
+
+			return;
+		}
+	}
+
+	// ID do not exist and check if there is a window left
+	if (vSensorInfo.size() < 6){
+		vSensorInfo.push_back(sensorInfo());
+		vSensorInfo.back().ID = ID;
+
+		vSensorInfo.back().data.push_back(sensorData());
+		vSensorInfo.back().data.back().value = iValue;
+
+		// Add time component
+		time_t rawtime;
+		time(&rawtime);
+		struct tm* timeinfo = localtime(&rawtime);
+		char buf[20];
+		strftime (buf,sizeof(buf),"%T",timeinfo);
+		vSensorInfo.back().data.back().timestamp = buf;
 	}
 }
 
@@ -239,4 +281,8 @@ int CLayout::getchar(){
 
 void CLayout::processRoutingInformation(std::vector<int> data){
 	cRoutingWindow.processRoutingInformation(data);
+}
+
+void CLayout::processSensorInformation(std::vector<int> data){
+	cSensorWindow.processSensorInformation(data);
 }
