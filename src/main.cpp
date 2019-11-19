@@ -41,6 +41,7 @@ int main(){
 
 		processSerialCommunication(cLayout);
 
+		cLayout.displayTitle();
 		cLayout.displayMiddle();
 
 		nKey = cLayout.getchar();
