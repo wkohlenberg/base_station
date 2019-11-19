@@ -39,6 +39,7 @@ public:
 
 	void updateSensorDataWindow(int nWin);
 	void displaySensorDataWindows();
+	void processSensorInformation(std::vector<int> data);
 
 	std::vector<WINDOW*> m_winSensorData;
 
@@ -73,6 +74,8 @@ public:
 	void displayFooter();
 	int getchar();
 	void processRoutingInformation(std::vector<int> data);
+	void processSensorInformation(std::vector<int> data);
+
 	void setPageNumber(unsigned pageNumber){page = pageNumber;}
 	unsigned getPageNumber(){return page;}
 
