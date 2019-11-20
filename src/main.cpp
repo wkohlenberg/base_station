@@ -11,6 +11,24 @@
 #include "hello-xmega-lib.h"
 #include "libtouch.h"
 
+int CheckButtonPressed() {
+
+	if (_oLinuxInput_Touched.bButton) {
+		// Sensor page button
+		if (((_oLinuxInput_Touched.nCol >= 82) && (_oLinuxInput_Touched.nCol <= 91)) &&
+			((_oLinuxInput_Touched.nRow >= 26) && (_oLinuxInput_Touched.nRow <= 30))) {
+			return 1;
+		}
+		// Routing page button
+		else if (((_oLinuxInput_Touched.nCol >= 91) && (_oLinuxInput_Touched.nCol <= 100)) &&
+			((_oLinuxInput_Touched.nRow >= 26) && (_oLinuxInput_Touched.nRow <= 30))) {
+			return 2;
+		}
+	}
+
+	return 0;
+}
+
 int main(){
 
 	// Init the correct Xmega-connection
@@ -73,6 +91,14 @@ int main(){
 			LinuxInput_ApplyShutdown();
 			return 2;
 	    }
+
+		// Check for buttons pressed
+		if (CheckButtonPressed() == 1){
+			cLayout.setPageNumber(1);
+		}
+		else if (CheckButtonPressed() == 2){
+			cLayout.setPageNumber(2);
+		}
 
 		processSerialCommunication(cLayout);
 
