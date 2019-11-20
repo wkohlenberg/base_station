@@ -9,6 +9,7 @@
 #include "layout.h"
 #include "protocol.h"
 #include "hello-xmega-lib.h"
+#include "libtouch.h"
 
 int main(){
 
@@ -22,6 +23,21 @@ int main(){
 	else {
 		std::cout << "done" << std::endl;
 	}
+
+	// Start to search for the correct event-stream
+	int nRet = LinuxInput_InitTouch();
+	if (nRet < 0) {
+		//printf("RaspberryPi 7\" Touch display is not found!\nError %d\n\n", nRet);
+		std::cout << "RaspberryPi 7\" Touch display is not found!" << std::endl;
+		std::cout << "Error " << nRet << std::endl << std::endl;
+		return -2;
+	}
+
+	// Cheange touch settings
+	_oLinuxInput_Settings.bRestartApply = false;
+	_oLinuxInput_Settings.nRestartWait = 3;
+	_oLinuxInput_Settings.bShutdownApply = false;
+	_oLinuxInput_Settings.nShutdownWait = 3;
 
 	initscr();			// Start curses mode
 	clear();			// Clear the screen
@@ -39,6 +55,25 @@ int main(){
 	int nKey;
 	while (!bExit) {
 
+		// Update touch
+	    LinuxInput_UpdateTouch();
+
+	    // Check for restart and shutdown
+	    if (_oLinuxInput_Settings.bRestartDetected) {
+			LinuxInput_CloseTouch();
+			endwin();
+
+			LinuxInput_ApplyRestart();
+			return 1;
+	    }
+	    if (_oLinuxInput_Settings.bShutdownDetected) {
+			LinuxInput_CloseTouch();
+			endwin();
+
+			LinuxInput_ApplyShutdown();
+			return 2;
+	    }
+
 		processSerialCommunication(cLayout);
 
 		cLayout.displayTitle();
@@ -49,6 +84,13 @@ int main(){
 			// Exit the program
 			bExit = true;
 		}
+	}
+
+	// Close the device
+	nRet = LinuxInput_CloseTouch();
+	if (nRet < 0) {
+		//printw("Close error %d!\n", nRet);
+		std::cout << "Close error " << nRet << "!" << std::endl;
 	}
 
 	endwin();			// End curses mode
