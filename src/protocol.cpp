@@ -44,6 +44,7 @@ int processSerialCommunication(CLayout &layout){
 	if (XmegaReadByte(&nType)) {
 
 		ReceivePacket(aBuf, SERIAL_BUF_SIZE);
+		std::vector<int> data = csvString(aBuf, ',');
 
 		if (!data.empty()){
 			switch (nType) {
