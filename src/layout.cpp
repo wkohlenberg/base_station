@@ -12,16 +12,6 @@ CSensorWindow::CSensorWindow(){
 	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 6));
 	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 35));
 	m_winSensorData.push_back(newwin(SENSOR_DATA_WINDOW_HEIGHT, SENSOR_DATA_WINDOW_WIDTH, 13, 64));
-
-	// Place static sensorInfo in vector
-/*	vSensorInfo.push_back(sensorInfo());
-	vSensorInfo.back().ID = 79;
-	vSensorInfo.back().data.push_back(sensorData());
-	vSensorInfo.back().data.push_back(sensorData());
-	vSensorInfo.back().data[0].timestamp = "11:25:48";
-	vSensorInfo.back().data[0].value = 1347;
-	vSensorInfo.back().data[1].timestamp = "11:26:01";
-	vSensorInfo.back().data[1].value = 865;*/
 }
 
 CSensorWindow::~CSensorWindow(){
@@ -35,11 +25,11 @@ void CSensorWindow::updateSensorDataWindow(int nWin){
 
 		// Update sensor Information if data is available for this window
 		if ((unsigned)nWin < vSensorInfo.size()){
-			mvwprintw(m_winSensorData[nWin], 1, 1, "Sensor %d:          Value", vSensorInfo[nWin].ID);
+			mvwprintw(m_winSensorData[nWin], 1, 2, "Sensor %d:          Value", vSensorInfo[nWin].ID);
 
 			int row = 2;
 			for (unsigned iData = vSensorInfo[nWin].data.size(); iData > 0; iData--){
-				mvwprintw(m_winSensorData[nWin], row++, 1, "%s              %d", vSensorInfo[nWin].data[(iData-1)].timestamp.c_str(), vSensorInfo[nWin].data[(iData-1)].value);
+				mvwprintw(m_winSensorData[nWin], row++, 2, "%s              %d", vSensorInfo[nWin].data[(iData-1)].timestamp.c_str(), vSensorInfo[nWin].data[(iData-1)].value);
 			}
 		}
 		wrefresh(m_winSensorData[nWin]);
@@ -212,6 +202,7 @@ CLayout::CLayout(){
 	pSensorPageButton = newwin(4, 9, 26, 82);
 	pRoutingPageButton = newwin(4, 9, 26, 91);
 
+	mvwprintw(pFooterWindow, 1, 1, "[ESC] to quit, LB>RB>RO to restart, LB>LO>RO to shutdown.");
 	mvwprintw(pSensorPageButton, 1, 1, "Sensor");
 	mvwprintw(pRoutingPageButton, 1, 2, "Route");
 	displayFooter();
