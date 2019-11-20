@@ -21,7 +21,7 @@ int _nLinuxInput_EventStream;
 int _nLinuxInput_EventStream_CurSlot;
 
 /** -----------------------------------
- * 
+ *
  */
 int LinuxInput_InitTouch() {
 
@@ -95,7 +95,7 @@ int LinuxInput_InitTouch() {
         // Close event-stream
         close(nDevice);
       }
-    }   
+    }
   }
 
   // Close directory read
@@ -107,7 +107,7 @@ int LinuxInput_InitTouch() {
 }
 
 /** -----------------------------------
- * 
+ *
  */
 bool LinuxInput_UpdateTouch() {
 
@@ -138,7 +138,7 @@ bool LinuxInput_UpdateTouch() {
           bUpdate = true;
           break;
 
-        case EV_KEY: 
+        case EV_KEY:
           switch (oEvent.code) {
             case BTN_TOUCH:
               if (oEvent.value > 0) {
@@ -160,10 +160,10 @@ bool LinuxInput_UpdateTouch() {
           }
           break;
 
-        case EV_REL: 
+        case EV_REL:
           break;
 
-        case EV_ABS: 
+        case EV_ABS:
           switch (oEvent.code) {
             case ABS_X:
               _oLinuxInput_Touched.nX = oEvent.value;
@@ -218,7 +218,7 @@ bool LinuxInput_UpdateTouch() {
 }
 
 /** -----------------------------------
- * 
+ *
  */
 int LinuxInput_CloseTouch() {
 
@@ -226,7 +226,7 @@ int LinuxInput_CloseTouch() {
 }
 
 /** -----------------------------------
- * 
+ *
  */
 void LinuxInput_ApplyRestart() {
 
@@ -237,13 +237,13 @@ void LinuxInput_ApplyRestart() {
     sleep(1);
   }
   printf("now!\n\n"); fflush(stdout);
-  system("/home/pi/ncurses_examples/libtouch-scripts/do_restart.sh");
+  system("/home/pi/base_station/src/libtouch-scripts/do_restart.sh");
 
   exit(1);
 }
 
 /** -----------------------------------
- * 
+ *
  */
 void LinuxInput_ApplyShutdown() {
 
@@ -254,13 +254,13 @@ void LinuxInput_ApplyShutdown() {
     sleep(1);
   }
   printf("now!\n\n"); fflush(stdout);
-  system("/home/pi/ncurses_examples/libtouch-scripts/do_shutdown.sh");
+  system("/home/pi/base_station/src/libtouch-scripts/do_shutdown.sh");
 
   exit(2);
 }
 
 /** -----------------------------------
- * 
+ *
  */
 void LinuxInput_UpdateSwipe() {
 
@@ -278,7 +278,7 @@ void LinuxInput_UpdateSwipe() {
   // A swipe:
   // - Start slot 0 holding in zone 0
   // - Move route in slot 1 over multiple zones
-  
+
   nWidth       = LINUXINPUT_DEVICE_WIDTH_PIX; // Not: _oLinuxInput_TerminalSize.ws_xpixel;
   nZoneWidth   = nWidth / LINUXINPUT_SWIPE_WIDTH_COUNT;
   nHeight      = LINUXINPUT_DEVICE_HEIGHT_PIX; // Not: _oLinuxInput_TerminalSize.ws_ypixel;
@@ -306,10 +306,10 @@ void LinuxInput_UpdateSwipe() {
   // Use curremt x,y that are always from the touchscreen (not from the terminal) to calculate the zone
   nCurrentX = _aLinuxInput_Slot[1].nX;
   nCurrentY = _aLinuxInput_Slot[1].nY;
-  nZoneNr = (nCurrentY / nZoneHeight) * LINUXINPUT_SWIPE_WIDTH_COUNT + (nCurrentX / nZoneWidth); 
+  nZoneNr = (nCurrentY / nZoneHeight) * LINUXINPUT_SWIPE_WIDTH_COUNT + (nCurrentX / nZoneWidth);
 
   //mvprintw(8,45,"wxh %d x %d  T(%d x %d)  zone wxh %d x %d        ", nWidth, nHeight, _oLinuxInput_TerminalSize.ws_xpixel, _oLinuxInput_TerminalSize.ws_ypixel, nZoneWidth, nZoneHeight);
-  //mvprintw(10,45,"zone xy %d,%d   xy %d %d   = %3d ", nCurrentX, nCurrentY, (nCurrentX / nZoneWidth), (nCurrentY / nZoneHeight), nZoneNr); 
+  //mvprintw(10,45,"zone xy %d,%d   xy %d %d   = %3d ", nCurrentX, nCurrentY, (nCurrentX / nZoneWidth), (nCurrentY / nZoneHeight), nZoneNr);
   //refresh();
 
   // Update the swipe?
@@ -323,7 +323,7 @@ void LinuxInput_UpdateSwipe() {
     // It is the last swipe state?
     if (_oLinuxInput_Settings.nRestartSwipeState + 1 == _oLinuxInput_Settings.nRestartSwipeSize) {
 
-      _oLinuxInput_Settings.nRestartSwipeState = 0;  
+      _oLinuxInput_Settings.nRestartSwipeState = 0;
       _oLinuxInput_Settings.bRestartDetected = true;
 
       // Apply?
@@ -336,7 +336,7 @@ void LinuxInput_UpdateSwipe() {
     // Wrong swipe zones
     _oLinuxInput_Settings.nRestartSwipeState = 0;
   }
-  //mvprintw(12,45,"restart state %d of %d ", _oLinuxInput_Settings.nRestartSwipeState, _oLinuxInput_Settings.nRestartSwipeSize); 
+  //mvprintw(12,45,"restart state %d of %d ", _oLinuxInput_Settings.nRestartSwipeState, _oLinuxInput_Settings.nRestartSwipeSize);
   //refresh();
 
   // Update the swipe?
@@ -350,7 +350,7 @@ void LinuxInput_UpdateSwipe() {
     // It is the last swipe state?
     if (_oLinuxInput_Settings.nShutdownSwipeState + 1 == _oLinuxInput_Settings.nShutdownSwipeSize) {
 
-      _oLinuxInput_Settings.nShutdownSwipeState = 0;  
+      _oLinuxInput_Settings.nShutdownSwipeState = 0;
       _oLinuxInput_Settings.bShutdownDetected = true;
 
       // Apply?
@@ -363,6 +363,6 @@ void LinuxInput_UpdateSwipe() {
     // Wrong swipe zones
     _oLinuxInput_Settings.nShutdownSwipeState = 0;
   }
-  //mvprintw(12,45,"Shutdown state %d of %d ", _oLinuxInput_Settings.nShutdownSwipeState, _oLinuxInput_Settings.nShutdownSwipeSize); 
+  //mvprintw(12,45,"Shutdown state %d of %d ", _oLinuxInput_Settings.nShutdownSwipeState, _oLinuxInput_Settings.nShutdownSwipeSize);
   //refresh();
 }
