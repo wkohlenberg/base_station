@@ -91,6 +91,13 @@ void CSensorWindow::processSensorInformation(std::vector<int> data){
 	}
 }
 
+void CSensorWindow::clearWindow(){
+	for (unsigned i = 0; i < SENSOR_DATA_WINDOWS; i++){
+		wclear(m_winSensorData[i]);
+		wrefresh(m_winSensorData[i]);
+	}
+}
+
 /**
  * Class Routing Window
  */
@@ -179,6 +186,11 @@ int CRoutingWindow::getchar(){
 	return wgetch(pRoutingWindow);
 }
 
+void CRoutingWindow::clearWindow(){
+	wclear(pRoutingWindow);
+	wrefresh(pRoutingWindow);
+}
+
 /**
  * Class Layout
  */
@@ -190,6 +202,7 @@ CLayout::CLayout(){
 
 	// Set default page
 	setPageNumber(DEFAULT_PAGE_NUMBER);
+	lastPage = DEFAULT_PAGE_NUMBER;
 
 	// Print page title
 	pTitleWindow = newwin(1, COLS, 0, 0);
@@ -215,20 +228,20 @@ CLayout::~CLayout(){
 void CLayout::displayTitle(){
 	mvwprintw(pTitleWindow, 0, 90, "%d-%d-%d", locTime->tm_mday, locTime->tm_mon, (1900+locTime->tm_year));
 
-	int iStartX = 0;
+	int iStartX = 30;
 
 	wattron(pTitleWindow, COLOR_PAIR(1));
 	switch (getPageNumber()){
 		case 0:				// Menu
 			break;
 		case 1:
-			iStartX = (COLS - sTitleSensorPage.length())/2;
 			mvwprintw(pTitleWindow, 0, iStartX, "                                          ");// clear title
+			iStartX = (COLS - sTitleSensorPage.length())/2;
 			mvwprintw(pTitleWindow, 0, iStartX, "%s", sTitleSensorPage.c_str());
 			break;
 		case 2:
-			iStartX = (COLS - sTitleRoutingPage.length())/2;
 			mvwprintw(pTitleWindow, 0, iStartX, "                                          ");// clear title
+			iStartX = (COLS - sTitleRoutingPage.length())/2;
 			mvwprintw(pTitleWindow, 0, iStartX, "%s", sTitleRoutingPage.c_str());
 			break;
 		default:
@@ -256,9 +269,15 @@ void CLayout::displayMiddle(){
 		case 0:				// Menu
 			break;
 		case 1:
+			if (getLastPageNumber() != getPageNumber()){
+				cRoutingWindow.clearWindow();
+			}
 			cSensorWindow.displaySensorDataWindows();
 			break;
 		case 2:
+			if (getLastPageNumber() != getPageNumber()){
+				cSensorWindow.clearWindow();
+			}
 			cRoutingWindow.updateRoutingWindow();
 			break;
 		default:

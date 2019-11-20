@@ -40,6 +40,7 @@ public:
 	void updateSensorDataWindow(int nWin);
 	void displaySensorDataWindows();
 	void processSensorInformation(std::vector<int> data);
+	void clearWindow();
 
 	std::vector<WINDOW*> m_winSensorData;
 
@@ -57,6 +58,7 @@ public:
 	void deleteFromRoutingTable(int dest);
 	void processRoutingInformation(std::vector<int> data);
 	int getchar();
+	void clearWindow();
 
 	WINDOW *pRoutingWindow;
 
@@ -76,8 +78,9 @@ public:
 	void processRoutingInformation(std::vector<int> data);
 	void processSensorInformation(std::vector<int> data);
 
-	void setPageNumber(unsigned pageNumber){page = pageNumber;}
+	void setPageNumber(unsigned pageNumber){lastPage = page; page = pageNumber;}
 	unsigned getPageNumber(){return page;}
+	unsigned getLastPageNumber(){return lastPage;};
 
 	CSensorWindow cSensorWindow;
 	CRoutingWindow cRoutingWindow;
@@ -92,6 +95,7 @@ private:
 	tm *locTime;
 
 	unsigned page;
+	unsigned lastPage;
 
 	// Title strings
 	std::string sTitleSensorPage 	= "Sensor Data";
