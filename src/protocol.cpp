@@ -30,6 +30,7 @@ std::vector<int> csvString(std::string dataString, char delim){
 			result.push_back(std::stoi(substr));
 		}
 		catch (const std::invalid_argument& ia){}
+		catch (const std::out_of_range& oof){}
 	}
 
 	return result;
