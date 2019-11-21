@@ -5,3 +5,5 @@ core
 *.o
 *.out*
 *.lst
+
+*.txt
