@@ -171,14 +171,17 @@ void CRoutingWindow::processRoutingInformation(std::vector<int> data){
 
 	for (unsigned dataIndex = 0; dataIndex < data.size(); dataIndex++){
 		dest = data.at(dataIndex++);
-		hop = data.at(dataIndex);
+		if (dataIndex < data.size()){
+			hop = data.at(dataIndex);
 
-		if (hop == 0){
-			deleteFromRoutingTable(dest);
+			if (hop == 0){
+				deleteFromRoutingTable(dest);
+			}
+			else if (hop > 0){
+				addToRoutingTable(dest, hop);
+			}
 		}
-		else if (hop > 0){
-			addToRoutingTable(dest, hop);
-		}
+		else {return;}
 	}
 }
 
