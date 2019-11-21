@@ -37,15 +37,21 @@ std::vector<int> csvString(std::string dataString, char delim){
 }
 
 // Process serial communication and push data to the correct window
-int processSerialCommunication(CLayout &layout){
+int processSerialCommunication(CLayout &layout, std::ofstream& file){
 
 	uint8_t nType;
 	char aBuf[SERIAL_BUF_SIZE];
 
 	if (XmegaReadByte(&nType)) {
 
-		ReceivePacket(aBuf, SERIAL_BUF_SIZE);
+		uint8_t nPacket = ReceivePacket(aBuf, SERIAL_BUF_SIZE);
 		std::vector<int> data = csvString(aBuf, ',');
+
+		// write to log file
+		file << nType << nPacket;
+		for (int i = 0; i < nPacket; i++){
+			file << aBuf[i];
+		}file << std::endl;
 
 		if (!data.empty()){
 			switch (nType) {

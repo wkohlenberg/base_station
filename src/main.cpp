@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <ncurses.h>
+#include <fstream>
 
 #include "layout.h"
 #include "protocol.h"
@@ -40,6 +41,14 @@ int main(){
 	}
 	else {
 		std::cout << "done" << std::endl;
+	}
+
+	// Open stream
+	std::ofstream logFile;
+	logFile.open("debug.txt", std::ofstream::app);
+	if (!logFile.is_open()){
+		std::cout << "Could not open log file." << std::endl;
+		return -3;
 	}
 
 	// Start to search for the correct event-stream
@@ -100,7 +109,7 @@ int main(){
 			cLayout.setPageNumber(2);
 		}
 
-		processSerialCommunication(cLayout);
+		processSerialCommunication(cLayout, logFile);
 
 		cLayout.displayTitle();
 		cLayout.displayMiddle();
@@ -118,6 +127,8 @@ int main(){
 		//printw("Close error %d!\n", nRet);
 		std::cout << "Close error " << nRet << "!" << std::endl;
 	}
+
+	logFile.close();
 
 	endwin();			// End curses mode
 	CloseXmegaSerial();
