@@ -29,7 +29,7 @@ void CSensorWindow::updateSensorDataWindow(int nWin){
 
 			int row = 2;
 			for (unsigned iData = vSensorInfo[nWin].data.size(); iData > 0; iData--){
-				mvwprintw(m_winSensorData[nWin], row++, 2, "%s              %d", vSensorInfo[nWin].data[(iData-1)].timestamp.c_str(), vSensorInfo[nWin].data[(iData-1)].value);
+				mvwprintw(m_winSensorData[nWin], row++, 2, "%s             %4d", vSensorInfo[nWin].data[(iData-1)].timestamp.c_str(), vSensorInfo[nWin].data[(iData-1)].value);
 			}
 		}
 		wrefresh(m_winSensorData[nWin]);
@@ -105,11 +105,6 @@ CRoutingWindow::CRoutingWindow(){
 	int iStartX = (COLS - ROUTING_WINDOW_WIDTH)/2;
 	pRoutingWindow = newwin(ROUTING_WINDOW_HEIGHT, ROUTING_WINDOW_WIDTH, 2, iStartX);
 	nodelay(pRoutingWindow, true);
-
-	// Add some test data
-	addToRoutingTable(55, 4);
-	addToRoutingTable(65, 6);
-	addToRoutingTable(81, 2);
 }
 
 CRoutingWindow::~CRoutingWindow(){
@@ -169,7 +164,7 @@ void CRoutingWindow::processRoutingInformation(std::vector<int> data){
 	int dest = 0;
 	int hop = 0;
 
-	for (unsigned dataIndex = 0; dataIndex < data.size(); dataIndex++){
+	for (unsigned dataIndex = 1; dataIndex < data.size(); dataIndex++){
 		dest = data.at(dataIndex++);
 		if (dataIndex < data.size()){
 			hop = data.at(dataIndex);
