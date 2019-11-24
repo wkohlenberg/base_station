@@ -56,6 +56,7 @@ public:
 
 	void addToRoutingTable(int dest, int hop);
 	void deleteFromRoutingTable(int dest);
+	void deleteAllFromRoutingTable();
 	void processRoutingInformation(std::vector<int> data);
 	int getchar();
 	void clearWindow();

@@ -160,9 +160,18 @@ void CRoutingWindow::deleteFromRoutingTable(int dest){
 	}
 }
 
+void CRoutingWindow::deleteAllFromRoutingTable(){
+	vRoutingTable.clear();
+}
+
 void CRoutingWindow::processRoutingInformation(std::vector<int> data){
 	int dest = 0;
 	int hop = 0;
+
+	if (data.size() == 1){
+		deleteAllFromRoutingTable();
+		return;
+	}
 
 	for (unsigned dataIndex = 1; dataIndex < data.size(); dataIndex++){
 		dest = data.at(dataIndex++);
